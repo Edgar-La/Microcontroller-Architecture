@@ -32,53 +32,38 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 			bic.b	#3,P1REN
 			clr.b	&P2OUT
 			mov.b	#0xFF,P2DIR
-			mov.b	#10,R12		; Se define la variable comparadora.
 
 
-Reset		clr.b	R10			; Aqui se reseta nuestro contador, para recomenzar el ciclo
+Tabla
+			mov.b	#00111111b, &0x200	;0
+			mov.b	#00000110b, &0x202	;1
+			mov.b	#01011011b, &0x204	;2
+			mov.b	#01001111b, &0x206	;3
+			mov.b	#01100110b, &0x208	;4
+			mov.b	#01101101b, &0x20A	;5
+			mov.b	#01111101b, &0x20C	;6
+			mov.b	#00000111b, &0x20E	;7
+			mov.b	#01111111b, &0x210	;8
+			mov.b	#01101111b, &0x212	;9
+
+inicio		mov 	#0x200, R4
+manda		mov.b	@R4+, &P2OUT
+ciclo		bit.b	#0x08, &P1IN		;Verifica estado del push button
+			jnz		ciclo				;Se mantiene en el ciclo
+			call	#soltar
+			inc		R4					;Para incrementar el numero guardado en la tabla.
+			cmp		#0x214, R4			;Verifica si ya se llegó al numero 9
+			jne		manda				;Si no, se repite la iteracion de incremento
+			jmp		inicio				;Se reinicia el ciclo
 
 
-NextNum		call 	#Tabla
-Apretar		mov.b	R11,&P2OUT		;Numero que aparece en el display
-			bit.b	#0x08,&P1IN		;Verfica el estado del push button
-			jz		Apretar			;Si es 1 se mantiene en el ciclo
-			call	#Soltar			;Si es cero sale, y llama a Soltar
-			inc 	R10				;Se incrementa el contador
-			cmp		R10, R12		;Compara si el contador es igual a 10
-			jeq		Reset			;Si es igual a 10, se reinicia, sino sigue
-			jmp		NextNum			;Si no fue 10, avanza a sig. iteracion
+soltar		bit.b	#0x08,	&P1IN		;Verifica estado del push button
+			jz		soltar				;Se mantiene en el ciclo
+			ret							;Rgresa a a donde fue llamado
 
-
-Soltar		bit.b	#0x08,	&P1IN	;Verifica estado del push button
-			jnz		Soltar			;Se mantiene en el ciclo
-			ret						;Rgresa a a donde fue llamado
-
-
-Tabla		mov.b	R10, R13
-			add		R13, R13
-			mov.b	R13, R14
-			add		R13, R14
-			add		R13, R14
-			add		R14,	PC
-			mov.b	#00111111b,R11	;Aparece en display 0
-			ret
-			mov.b	#00000110b,R11	;Aparece en display 1
-			ret
-			mov.b	#01011011b,R11	;Aparece en display 2
-			ret
-			mov.b	#01001111b,R11	;Aparece en display 3
-			ret
-			mov.b	#01100110b,R11	;Aparece en display 4
-			ret
-			mov.b	#01101101b,R11	;Aparece en display 5
-			ret
-			mov.b	#01111101b,R11	;Aparece en display 6
-			ret
-			mov.b	#00000111b,R11	;Aparece en display 7
-			ret
-			mov.b	#01111111b,R11	;Aparece en display 8
-			ret
-			mov.b	#01101111b,R11	;Aparece en display 9
+retardo		mov		#10000, R15
+nueve		dec		R15
+			jnz		nueve
 			ret
 
 ;-------------------------------------------------------------------------------
