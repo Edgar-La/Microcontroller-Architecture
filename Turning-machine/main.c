@@ -10,8 +10,10 @@ void senal_acustica();
 int main(void)
 {
     WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
-    P2DIR |=0xFF;   //Defino los pines de salida (para sensores y maquinaria)
+    P1DIR |=0x0C;
+    P2DIR |=0x07;   //Defino los pines de salida (para sensores y maquinaria)
     P1REN = BIT0;   //Desabilitar resistencia pull-up para push button
+    P1OUT = 0x00;
     P2OUT = 0x00;   //Inicializo en cero los sensores y maquinaria
 
     for(;;)
@@ -20,25 +22,28 @@ int main(void)
         P2OUT = 0x01;      //Comienza cilindro
         delay(7000);
 
-        P2OUT = 0x03;      //Enciende sensor 'B'
+        P1OUT = 0x04;      //Enciende sensor 'B'
         delay(7000);
 
-        P2OUT = 0x07;      //Activa rele motor
+        P2OUT = 0x03;      //Activa rele motor
         delay(7000);
 
-        P2OUT = 0x0F;      //Enciende sensor 'C'
+        P1OUT = 0x0C;      //Enciende sensor 'C'
         delay(8000);
 //------------------------------------------------
-        P2OUT = 0x07;      //Cilindro se detuvo, Se apaga sensor 'C'
+        P1OUT = 0x04;      //Cilindro se detuvo, Se apaga sensor 'C'
         delay(7000);
 
-        P2OUT = 0x03;      //Se desactiva rele motor
+        P2OUT = 0x01;      //Se desactiva rele motor
         delay(7000);
 
-        P2OUT = 0x01;      //Se apaga sensor 'B'
-        delay(7500);
+        P1OUT = 0x00;      //Se apaga sensor 'B'
+        delay(7000);
 
+        P2OUT = 0x00;       //Apago LED cilindro
+        delay(8000);
         senal_acustica();
+
     }
 
 return 0;
@@ -63,7 +68,7 @@ void senal_acustica()
     int sound = 0;
     for (sound = 0; sound <= 5; sound++)
     {
-        P2OUT = 0x10;      //Enciende señal acustica
+        P2OUT = 0x04;      //Enciende señal acustica
         delay(3000);
         P2OUT = 0x00;      //Apaga señal acustica
         delay(2000);
