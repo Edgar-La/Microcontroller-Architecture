@@ -19,24 +19,27 @@ int main(void)
 
 
 
-int tr = 10000;
+int tr = 30000;
 	for(;;) //Ciclo infinito
 	{
-	    iniciar_proceso();      //Espera hasta que se oprima boton inicio
-	    P2OUT = 0b00001000;           //Comienza BR
-	    delay(tr+4000);
+	    iniciar_proceso();            //Espera hasta que se oprima boton inicio
+	    //P1OUT = 0b0010;             //Sensor 'a'
+	    //delay(tr);
 
-	    P1OUT = 0b00000100;           //LLega a sensor b y
+	    P2OUT = 0b1000;               //Comienza BR
+	    delay(tr);
+
+	    P1OUT = 0b0100;               //LLega a sensor b y
 	    P2OUT = 0b00010010;           // activo Rele y bajanda lenta
 	    delay(tr);
 
-	    P1OUT = 0b00001000;           //Sensor c
+	    P1OUT = 0b1000;           //Sensor c
 	    P2OUT = 0b0000011;           //Subida rapida y sigue activo rele.
 	    delay(tr);
 
 	    P1OUT = 0b00000010;           //Se activa sensor a
 	    P2OUT = 0b00000000;           //Detengo subida rapida y rele.
-	    delay(tr + 500);
+	    delay(tr);
 
 	    P1OUT = 0b00000000;           //Apago sensor a
 	    senal_acustica();             //Inicia senal acustica
@@ -69,8 +72,8 @@ void senal_acustica()
     for (sound = 1; sound <= 5; sound++)
     {
         P1OUT = 0b00100000;      //Enciende señal acustica
-        delay(3000);
+        delay(4000);
         P1OUT = 0b00000000;      //Apaga señal acustica
-        delay(2000);
+        delay(3000);
     }
 }
