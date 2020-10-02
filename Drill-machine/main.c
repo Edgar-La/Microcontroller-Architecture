@@ -17,43 +17,37 @@ int main(void)
 	P1OUT = 0x00;       //Inicializo salida en cero
 	P2OUT = 0x00;       //Inicializo salida en cero
 
-int tr = 8000;
+
+
+int tr = 10000;
 	for(;;) //Ciclo infinito
 	{
 	    iniciar_proceso();      //Espera hasta que se oprima boton inicio
-	    P2OUT = 0b00001000;           //Coemienza BR
+	    P2OUT = 0b00001000;           //Comienza BR
+	    delay(tr+4000);
+
+	    P1OUT = 0b00000100;           //LLega a sensor b y
+	    P2OUT = 0b00010010;           // activo Rele y bajanda lenta
 	    delay(tr);
 
-	    P2OUT = 0b00000000;           //Detengo BR
-	    P1OUT = 0b00000100;           //Sensor b
-	    delay(tr);
-
-	    P1OUT = 0b00000000;           //Apago sensor b
-	    P2OUT = 0b00000010;           //On Rele
-	    delay(tr);
-
-	    P2OUT = 0b00010000;           //Off rele y comienza BL
-	    delay(tr);
-
-	    P2OUT = 0b00000000;           //Detengo BL
 	    P1OUT = 0b00001000;           //Sensor c
+	    P2OUT = 0b0000011;           //Subida rapida y sigue activo rele.
 	    delay(tr);
 
-	    P1OUT = 0b00000000;           //Apago sensor c
-	    P2OUT = 0b00000001;           //Comienza SR
-	    delay(tr);
-
-	    P2OUT = 0b00000000;           //Detengo SR
-	    P1OUT = 0b00000010;           //Sensor a
+	    P1OUT = 0b00000010;           //Se activa sensor a
+	    P2OUT = 0b00000000;           //Detengo subida rapida y rele.
 	    delay(tr + 500);
 
 	    P1OUT = 0b00000000;           //Apago sensor a
 	    senal_acustica();             //Inicia senal acustica
 	}
 
-	
-	return 0;
+return 0;
 }
+
+
+
+
 
 //Definicion de funciones---------------------------------------
 void iniciar_proceso()
@@ -61,15 +55,14 @@ void iniciar_proceso()
     while((P1IN & 0x01) != 0); //Ciclado hasta que el operario aprieta Inicio
     while((P1IN & 0x01) == 0); //Ciclado hasta que operario libere Inicio
 }
-
+////////////////////////////////////////////////////////////////
 int count;
 void delay(int time_)
 {
     for (count=1; count<time_; count++)
     {}
 }
-
-
+////////////////////////////////////////////////////////////////
 void senal_acustica()
 {
     int sound = 0;
