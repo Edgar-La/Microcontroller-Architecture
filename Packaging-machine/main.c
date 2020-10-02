@@ -5,8 +5,8 @@
 //Funciones prototipo-------------------------------------------
 void Activar_Desactivar();
 void delay(int time_);
-void S_acustica_y_M_embalajes();
 void conteo_piezas(int piezas_);
+void S_acustica_y_M_embalajes();
 
 //Funcion main--------------------------------------------------
 int main(void)
@@ -18,16 +18,13 @@ int main(void)
     P1OUT = 0x00;       //Inicializo salida en cero
     P2OUT = 0x00;       //Inicializo salida en cero
 
+    int Piezas = 10;
 
-//int tr = 10000;
-int Piezas = 10;
     for(;;) //Ciclo infinito
     {
-        Activar_Desactivar();      //Espera hasta que se cierra switch
-
-        conteo_piezas(Piezas);  //
-        S_acustica_y_M_embalajes();       //Inicia senal acustica y cambio de envase
-
+        Activar_Desactivar();           //Espera hasta que se cierra switch
+        conteo_piezas(Piezas);          //Ciclo para para las n-piezas
+        S_acustica_y_M_embalajes();     //Inicia senal acustica y cambio de envase
     }
 
 return 0;
@@ -36,8 +33,8 @@ return 0;
 
 
 
-
-//Definicion de funciones---------------------------------------
+//Definicion de funciones
+////////////////////////////////////////////////////////////////
 void Activar_Desactivar()
 {
     while((P1IN & 0x01) != 0)       //Ciclado hasta que el operario aprieta Inicio
