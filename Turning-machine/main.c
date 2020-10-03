@@ -10,39 +10,35 @@ void senal_acustica();
 int main(void)
 {
     WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
-    P1DIR |=0x0C;
-    P2DIR |=0x07;   //Defino los pines de salida (para sensores y maquinaria)
+    P1DIR |=0b1110;
+    P2DIR |=0b0111;;   //Defino los pines de salida (para sensores y maquinaria)
     P1REN = BIT0;   //Desabilitar resistencia pull-up para push button
     P1OUT = 0x00;
     P2OUT = 0x00;   //Inicializo en cero los sensores y maquinaria
-
+int t_delay =31000;
     for(;;)
     {
         Inicio_proceso();      //Ciclado hasta que se oprima
-        P2OUT = 0x01;      //Comienza cilindro
-        delay(7000);
+        P1OUT = 0b0010;
+        P2OUT = 0b0001;      //Comienza cilindro
+        delay(t_delay);
 
-        P1OUT = 0x04;      //Enciende sensor 'B'
-        delay(7000);
+        P1OUT = 0b0100;      //Enciende sensor 'B'
+        P2OUT = 0b0011;      //Enciende rele, sigue cilindro
+        delay(t_delay);
 
-        P2OUT = 0x03;      //Activa rele motor
-        delay(7000);
+        P1OUT = 0b1000;      //Enciende sensor 'C'
+        P2OUT = 0b0010;      //Desactivo cilindro, sigue rele.
+        delay(t_delay);
 
-        P1OUT = 0x0C;      //Enciende sensor 'C'
-        delay(8000);
-//------------------------------------------------
-        P1OUT = 0x04;      //Cilindro se detuvo, Se apaga sensor 'C'
-        delay(7000);
+        P1OUT = 0b0100;      //Vuelve a pasar por sensor 'B'
+        P2OUT = 0b0000;      //Apago rele.
+        delay(t_delay);
 
-        P2OUT = 0x01;      //Se desactiva rele motor
-        delay(7000);
-
-        P1OUT = 0x00;      //Se apaga sensor 'B'
-        delay(7000);
-
-        P2OUT = 0x00;       //Apago LED cilindro
-        delay(8000);
+        P1OUT = 0b0010;
         senal_acustica();
+
+        P1OUT = 0b0000;
 
     }
 
