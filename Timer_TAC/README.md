@@ -4,4 +4,4 @@ The simulation will count up to 10 times, because that is how it was specified i
 
 You can find the code [here](https://github.com/Edgar-La/Microcontroller-Architecture/blob/main/Timer_TAC/main.c).
 
-Also, you can finde the simulation [video](https://drive.google.com/file/d/1BVJU0Lcr0i9syNrIT7banU2RGQp7om3t/view?usp=sharing).
+Also, you can find the simulation [video](https://drive.google.com/file/d/1BVJU0Lcr0i9syNrIT7banU2RGQp7om3t/view?usp=sharing).
