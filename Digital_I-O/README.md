@@ -4,7 +4,7 @@ Aqui se encuentra el código del [programa](https://github.com/Edgar-La/Microcon
 
 
 ## Simulación
-Video de la simulación del [Interruptor](https://drive.google.com/file/d/1CZJWuQxjnmC4UdSqtzQsK0D8yZQi2BUU/view?usp=sharing)
+Video de la simulación del [Conversor](https://drive.google.com/file/d/1CZJWuQxjnmC4UdSqtzQsK0D8yZQi2BUU/view?usp=sharing).
 
 
 ## Anexos de la simulación
