@@ -1,6 +1,6 @@
 # Conversor analogico digital
 
-Aqui se encuentra el código del [programa](https://github.com/Edgar-La/Microcontroller-Architecture/blob/main/Digital_I-O/main.c) que muestra el uso de un interruptor.
+Aqui se encuentra el código del [programa](https://github.com/Edgar-La/Microcontroller-Architecture/blob/main/Digital_I-O/main.c) que muestra el uso de un conversor con referencia externa.
 
 
 ## Simulación
