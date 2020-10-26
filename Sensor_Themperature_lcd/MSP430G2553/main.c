@@ -1,6 +1,6 @@
 #include <msp430.h>
 #include "intrinsics.h"
-#include "lcdLib.h"                                     //Se modifico para que tenga salidas en Puerto 3
+#include "lcdLib.h"                                     
 
 int main( void )
 {
@@ -20,7 +20,7 @@ int main( void )
 
    for (;;)
    {
-      ADC10CTL0 |= ENC + ADC10SC;             //Activo e inicio la conversión
+      ADC10CTL0 |= ENC + ADC10SC;             //Activo e inicio la conversiÃ³n
 
 
       //Temp_num = ADC10MEM*(150/1023);
