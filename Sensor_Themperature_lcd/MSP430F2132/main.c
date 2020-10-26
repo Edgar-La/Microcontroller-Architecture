@@ -20,7 +20,7 @@ int main( void )
 
    for (;;)
    {
-      ADC10CTL0 |= ENC + ADC10SC;             //Activo e inicio la conversión
+      ADC10CTL0 |= ENC + ADC10SC;             //Activo e inicio la conversiÃ³n
 
       __low_power_mode_0();//__bis_SR_register(CPUOFF + GIE);// LPM0, ADC10_ISR will force exit
 
@@ -35,6 +35,7 @@ int main( void )
 
 
       Temp_num = ADC10MEM;
+      //Temp_num = Temp_num*(150/1023);
       Temp_num = Temp_num*(0.146627566);
       sprintf(Temp, "%d", Temp_num);
       strcat(Temp, "*C ");
