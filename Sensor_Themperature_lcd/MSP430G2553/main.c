@@ -25,7 +25,7 @@ int main( void )
 
       //Temp_num = ADC10MEM*(150/1023);
       //Temp_num = ADC10MEM*(0.146627566);
-      Temp_num = (ADC10MEM*0.2326)-87.33;
+      Temp_num = (ADC10MEM*0.2326)-87.33;       //Se tiene que usar ecn acorde a la pp 40 del DataSheet
       sprintf(Temp, "%d", Temp_num);
       strcat(Temp, "*C ");
       lcdSetText("Temperatura de:", 0, 0);
