@@ -6,8 +6,8 @@ String Out = "-"; String tecladillo = "";
 String Status = "Inicio"; int Filtro;// = "";
 int LED_C = 13, edo_btns = 0;
 const int ledPH = 9; const int ledPL = 10; const int ledBP = 11; const int ledSB = 12;
-//float ALFA = 0;
-String ALFA = "";
+float ALFA_F = 0;
+String ALFA_S = "";
 
 char password[] = "1234";
 String pass_check = "";
@@ -57,9 +57,10 @@ void loop(){
           lcd.setCursor(1, 1); lcd.print("Digite alfa:");
           if (tecladillo != "=")
           {
-            ALFA += tecladillo;
-            lcd.clear(); lcd.setCursor(6, 0); lcd.print("Alfa = "); //ALFA+=customKey;
-              lcd.setCursor(5,1); lcd.print(ALFA); Serial.println(tecladillo);
+            ALFA_S += tecladillo;
+            lcd.clear(); lcd.setCursor(6, 0); lcd.print("Alfa = ");
+            ALFA_F = ALFA_S.toFloat();
+            lcd.setCursor(5,1); lcd.print(ALFA_F); Serial.println(tecladillo);
           }
           digitalWrite(ledPH , 1); digitalWrite(ledPL , 0);  digitalWrite(ledBP , 0); digitalWrite(ledSB , 0);
           Serial.println(customKey);
