@@ -2,9 +2,12 @@
 #include <string.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-
+String Out = "-"; String tecladillo = "";
+String Status = "Inicio"; int Filtro;// = "";
 int LED_C = 13, edo_btns = 0;
 const int ledPH = 9; const int ledPL = 10; const int ledBP = 11; const int ledSB = 12;
+//float ALFA = 0;
+String ALFA = "";
 
 char password[] = "1234";
 String pass_check = "";
@@ -44,46 +47,41 @@ void setup(){
 void loop(){
   char customKey = teclado.getKey();
   if (customKey != NO_KEY){
-    //digitalWrite(LED_C, HIGH);
-    //pass_check += customKey;
-    //lcd.clear(); lcd.setCursor(0, 0); lcd.print(pass_check);
-    //Serial.println(customKey);
-    /*
-      if (pass_check == password)
-      {
-        lcd.clear(); lcd.setCursor(3, 0); lcd.print("Contrasena:");
-        lcd.setCursor(7,1); lcd.print(pass_check);
-        digitalWrite(LED_C, edo_btns);
-        Serial.println("Iniciando"); delay(500);
-        Serial.println(pass_check);
-        Serial.println("...Testeando...");delay(2000);
+        if (Status == "Inicio") {   Filtro = customKey; Status = "Otro";    }
+        else {    tecladillo = ""; tecladillo = customKey;    }
         
-        digitalWrite(LED_C, !edo_btns);
-        
-        Serial.println("Testado");
-        pass_check = "";
-        }*/
-        switch(customKey){
+
+        switch(Filtro){
           case '1':
-          lcd.clear(); lcd.setCursor(1, 0); lcd.print("1) High Pass:");
+          lcd.clear(); lcd.setCursor(1, 0); lcd.print("1) High Pass");
+          lcd.setCursor(1, 1); lcd.print("Digite alfa:");
+          if (tecladillo != "=")
+          {
+            ALFA += tecladillo;
+            lcd.clear(); lcd.setCursor(6, 0); lcd.print("Alfa = "); //ALFA+=customKey;
+              lcd.setCursor(5,1); lcd.print(ALFA); Serial.println(tecladillo);
+          }
           digitalWrite(ledPH , 1); digitalWrite(ledPL , 0);  digitalWrite(ledBP , 0); digitalWrite(ledSB , 0);
           Serial.println(customKey);
           break;
+          
           case '2':
-          lcd.clear(); lcd.setCursor(2, 0); lcd.print("2) Low Pass:");
+          lcd.clear(); lcd.setCursor(2, 0); lcd.print("2) Low Pass");
           digitalWrite(ledPH , 0); digitalWrite(ledPL , 1);  digitalWrite(ledBP , 0); digitalWrite(ledSB , 0);
           Serial.println(customKey);
           break;
           case '3':
-          lcd.clear(); lcd.setCursor(2, 0); lcd.print("3) Band Pass:");
+          
+          lcd.clear(); lcd.setCursor(2, 0); lcd.print("3) Band Pass");
           digitalWrite(ledPH , 0); digitalWrite(ledPL , 0);  digitalWrite(ledBP , 1); digitalWrite(ledSB , 0);
           Serial.println(customKey);
           break;
+          
           case '4':
-          lcd.clear(); lcd.setCursor(2, 0); lcd.print("4) Band Stop:");
+          lcd.clear(); lcd.setCursor(2, 0); lcd.print("4) Band Stop");
           digitalWrite(ledPH , 0); digitalWrite(ledPL , 0);  digitalWrite(ledBP , 0); digitalWrite(ledSB , 1);
           Serial.println(customKey);
           break;
-        }
-  }
+          }
+    }
 }
