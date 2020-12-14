@@ -3,11 +3,13 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 String tecladillo = "";
-String Status = "Inicio"; int Filtro;// = "";
+String Status = "Inicio"; int Filtro;
 
 const int ledPH = 9; const int ledPL = 10; const int ledBP = 11; const int ledSB = 12;
-float ALFA_F = 0;
-String ALFA_S = "";
+float ALFA_F = 0; float ALFA_f_get = 0; String ALFA_S = "";
+float ALFA_PH, ALFA_PL, ALFA_BP_1, ALFA_BP_2, ALFA_SB_1, ALFA_SB_2;
+int PASAR = 1;
+
 
 //-----------------------Seccion KEYPAD---------------------------------------
 const byte filas = 4; 
@@ -24,6 +26,7 @@ Keypad teclado = Keypad(makeKeymap(teclas), filas_Pines, colum_Pines, filas, col
 //-----------------------Seccion LCD I2C---------------------------------------
 LiquidCrystal_I2C lcd(0x20,16,2);
 //-----------------------------------------------------------------------------
+
 void setup(){
   Serial.begin(9600);
   //-----------LEDS
@@ -36,6 +39,7 @@ void setup(){
   lcd.setCursor(0,1);
   lcd.print("1PH 2PL 3BP 4SB");
 }
+
 //-----------------------------------------------------------------------------
 void loop(){
   char customKey = teclado.getKey();
@@ -45,39 +49,47 @@ void loop(){
 
         switch(Filtro){
           case '1':
-          lcd.clear(); lcd.setCursor(1, 0); lcd.print("1) High Pass");
-          lcd.setCursor(1, 1); lcd.print("Digite alfa:");
-          if (tecladillo != "=")
-          {
-            ALFA_S += tecladillo;
-            lcd.clear(); lcd.setCursor(6, 0); lcd.print("Alfa = ");
-            lcd.setCursor(5,1); lcd.print(ALFA_S); Serial.println(tecladillo);
-          }
-          else{ALFA_F = ALFA_S.toFloat();
-          lcd.clear(); lcd.setCursor(6, 0); lcd.print("Alfa = ");
-          lcd.setCursor(5,1); lcd.print(ALFA_F); Serial.println(ALFA_F);
-          }
+          ALFA_PH = obtener_ALFA("1) High Pass", "Alfa = ");
           digitalWrite(ledPH , 1); digitalWrite(ledPL , 0);  digitalWrite(ledBP , 0); digitalWrite(ledSB , 0);
-          Serial.println(customKey);
           break;
           
           case '2':
-          lcd.clear(); lcd.setCursor(2, 0); lcd.print("2) Low Pass");
+          ALFA_PL = obtener_ALFA("2) Low Pass", "Alfa = ");
           digitalWrite(ledPH , 0); digitalWrite(ledPL , 1);  digitalWrite(ledBP , 0); digitalWrite(ledSB , 0);
-          Serial.println(customKey);
           break;
-          case '3':
           
-          lcd.clear(); lcd.setCursor(2, 0); lcd.print("3) Band Pass");
+          case '3':
+          if (PASAR == 1) {  ALFA_BP_1 = obtener_ALFA("3) Band Pass", "Alfa1= ");  }
+          else if (PASAR == 2){ALFA_BP_2 = obtener_ALFA("Digite ahora", "Alfa2= ");  }
+          //ALFA_BP_2 = obtener_ALFA("3) Band Pass", "Alfa2 = ");
           digitalWrite(ledPH , 0); digitalWrite(ledPL , 0);  digitalWrite(ledBP , 1); digitalWrite(ledSB , 0);
-          Serial.println(customKey);
           break;
           
           case '4':
-          lcd.clear(); lcd.setCursor(2, 0); lcd.print("4) Band Stop");
+          if (PASAR == 1) {  ALFA_SB_1 = obtener_ALFA("3) Band Pass", "Alfa1= ");  }
+          else if (PASAR == 2){ALFA_SB_2 = obtener_ALFA("Digite ahora", "Alfa2= ");  }
           digitalWrite(ledPH , 0); digitalWrite(ledPL , 0);  digitalWrite(ledBP , 0); digitalWrite(ledSB , 1);
-          Serial.println(customKey);
           break;
           }
     }
+}
+
+float obtener_ALFA(String Tipo_filtro,String Alfa_igual)
+{
+          if (tecladillo != "=")
+          {
+            lcd.clear(); lcd.setCursor(1, 0); lcd.print(Tipo_filtro);
+            ALFA_S += tecladillo;
+            lcd.setCursor(0, 1); lcd.print(Alfa_igual);
+            lcd.setCursor(6,1); lcd.print(ALFA_S); Serial.println(tecladillo);
+          }
+          else
+          {
+            ALFA_f_get = ALFA_S.toFloat();
+            lcd.clear(); lcd.setCursor(6, 0); lcd.print(Alfa_igual);
+            lcd.setCursor(7,1); lcd.print(ALFA_f_get); Serial.println(ALFA_f_get);
+            PASAR = 2;
+            ALFA_S = ""; delay(500);
+            return ALFA_f_get;
+          }          
 }
