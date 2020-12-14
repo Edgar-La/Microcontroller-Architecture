@@ -2,15 +2,13 @@
 #include <string.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-String Out = "-"; String tecladillo = "";
+String tecladillo = "";
 String Status = "Inicio"; int Filtro;// = "";
-int LED_C = 13, edo_btns = 0;
+
 const int ledPH = 9; const int ledPL = 10; const int ledBP = 11; const int ledSB = 12;
 float ALFA_F = 0;
 String ALFA_S = "";
 
-char password[] = "1234";
-String pass_check = "";
 //-----------------------Seccion KEYPAD---------------------------------------
 const byte filas = 4; 
 const byte colum = 3;
@@ -28,20 +26,15 @@ LiquidCrystal_I2C lcd(0x20,16,2);
 //-----------------------------------------------------------------------------
 void setup(){
   Serial.begin(9600);
-  pinMode(LED_C, OUTPUT);
-  digitalWrite(LED_C, !edo_btns);
-  Serial.println("Digite '1234'");
   //-----------LEDS
   pinMode(ledPH , OUTPUT); pinMode(ledPL , OUTPUT); pinMode(ledBP , OUTPUT); pinMode(ledSB , OUTPUT);
   //---------------
   lcd.begin(16, 2);
-  //Cursor en la posicion 3,0
   lcd.setCursor(2, 0);
   lcd.backlight();
   lcd.print("Selec Filtro:");
   lcd.setCursor(0,1);
   lcd.print("1PH 2PL 3BP 4SB");
-  digitalWrite(ledPH , LOW);
 }
 //-----------------------------------------------------------------------------
 void loop(){
@@ -49,7 +42,6 @@ void loop(){
   if (customKey != NO_KEY){
         if (Status == "Inicio") {   Filtro = customKey; Status = "Otro";    }
         else {    tecladillo = ""; tecladillo = customKey;    }
-        
 
         switch(Filtro){
           case '1':
@@ -59,8 +51,11 @@ void loop(){
           {
             ALFA_S += tecladillo;
             lcd.clear(); lcd.setCursor(6, 0); lcd.print("Alfa = ");
-            ALFA_F = ALFA_S.toFloat();
-            lcd.setCursor(5,1); lcd.print(ALFA_F); Serial.println(tecladillo);
+            lcd.setCursor(5,1); lcd.print(ALFA_S); Serial.println(tecladillo);
+          }
+          else{ALFA_F = ALFA_S.toFloat();
+          lcd.clear(); lcd.setCursor(6, 0); lcd.print("Alfa = ");
+          lcd.setCursor(5,1); lcd.print(ALFA_F); Serial.println(ALFA_F);
           }
           digitalWrite(ledPH , 1); digitalWrite(ledPL , 0);  digitalWrite(ledBP , 0); digitalWrite(ledSB , 0);
           Serial.println(customKey);
