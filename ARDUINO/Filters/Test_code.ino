@@ -49,25 +49,28 @@ void loop(){
 
         switch(Filtro){
           case '1':
-          ALFA_PH = obtener_ALFA("1) High Pass", "Alfa = ");
+          if (PASAR == 1){  ALFA_PH = obtener_ALFA("1) High Pass", "Alfa = ");  }
+          else if (PASAR == 2){  lcd.clear(); lcd.setCursor(2, 0); lcd.print("Ya estoy"); lcd.setCursor(2, 1); lcd.print("filtrando :)"); }
           digitalWrite(ledPH , 1); digitalWrite(ledPL , 0);  digitalWrite(ledBP , 0); digitalWrite(ledSB , 0);
           break;
           
           case '2':
-          ALFA_PL = obtener_ALFA("2) Low Pass", "Alfa = ");
+          if (PASAR == 1){  ALFA_PL = obtener_ALFA("2) Low Pass", "Alfa = "); }
+          else if (PASAR == 2){   }
           digitalWrite(ledPH , 0); digitalWrite(ledPL , 1);  digitalWrite(ledBP , 0); digitalWrite(ledSB , 0);
           break;
           
           case '3':
           if (PASAR == 1) {  ALFA_BP_1 = obtener_ALFA("3) Band Pass", "Alfa1= ");  }
           else if (PASAR == 2){ALFA_BP_2 = obtener_ALFA("Digite ahora", "Alfa2= ");  }
-          //ALFA_BP_2 = obtener_ALFA("3) Band Pass", "Alfa2 = ");
+          else if (PASAR == 3){   }
           digitalWrite(ledPH , 0); digitalWrite(ledPL , 0);  digitalWrite(ledBP , 1); digitalWrite(ledSB , 0);
           break;
           
           case '4':
-          if (PASAR == 1) {  ALFA_SB_1 = obtener_ALFA("3) Band Pass", "Alfa1= ");  }
+          if (PASAR == 1) {  ALFA_SB_1 = obtener_ALFA("4) Band Stop", "Alfa1= ");  }
           else if (PASAR == 2){ALFA_SB_2 = obtener_ALFA("Digite ahora", "Alfa2= ");  }
+          else if (PASAR == 3){   lcd.clear(); lcd.setCursor(2, 0); lcd.print("Ya estoy"); lcd.setCursor(2, 1); lcd.print("filtrando :)");   }
           digitalWrite(ledPH , 0); digitalWrite(ledPL , 0);  digitalWrite(ledBP , 0); digitalWrite(ledSB , 1);
           break;
           }
@@ -88,8 +91,8 @@ float obtener_ALFA(String Tipo_filtro,String Alfa_igual)
             ALFA_f_get = ALFA_S.toFloat();
             lcd.clear(); lcd.setCursor(6, 0); lcd.print(Alfa_igual);
             lcd.setCursor(7,1); lcd.print(ALFA_f_get); Serial.println(ALFA_f_get);
-            PASAR = 2;
-            ALFA_S = ""; delay(500);
+            PASAR++;
+            ALFA_S = ""; //delay(30);
             return ALFA_f_get;
           }          
 }
